@@ -1,0 +1,26 @@
+1. 리액트 설치하기
+npx create-react-app react-app ./ 리액트를 설치하고자 하는 디렉토리 이름
+2. 도커파일을 만들때 개발환경용 dockerfile.dev와 배포환경의 도커파일을 만들어주는것이좋다.
+참고로 로컬에 노드모듈을 지워주는것이좋다. COPY 시에 ./ ./ 로 파일 전체를 워킹디렉토리에 복사하는데
+이미 npm install로 넣었기때문에 노드모듈이 중복된다.
+
+
+Nginx로 운영환경 설정
+첫째 builder stage
+둘째 run stage
+
+디버그
+에러 1. unable to prepare context: unable to evaluate symlinks 
+dockerfile.dev 로 주는 경우 dockerfile만을 감지하기에 뒤에.dev를 찾지 못한다.
+해결방안 : docker build -f Dockerfile.dev . 로 (f 옵션으로 임의의 이름을 설정해준다.)
+
+Nginx 사용하는 이유
+개발서버에서 기존에 html,css와같은 정적파일을 내려줬는데
+
+운영환경에서는 개발서버가 존재하지않기때문에 해당 부분에 Nginx가 존재하여 정적파일을 제공하게된다
+build된 파일을 요청에맞게 정적파일을 제공함
+
+왜 개발환경서버를 운영환경의 서버에 사용하지않는지?
+개발에서 사용하는 서버는 소스를 변경하면 자동으로 전체 앱을 다시 빌드해서 변경소스를 반영해주는 것같이 개발환경에 특화된 기능이다. 개발에만 필요한 소스가 존재하기에 비교적 무겁다
+
+Nginx는 소스가 변경되었다고해서 바로 반영해주지않는다. 
