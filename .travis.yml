@@ -5,6 +5,7 @@ language: generic
 services:
   - docker
 
+
 before_install:
   - echo "start createing an image with dockerfile"
   - docker build -t acoursove2/nginx-app -f Dockerfile.dev .
