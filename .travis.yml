@@ -1,0 +1,16 @@
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - echo "start createing an image with dockerfile"
+  - docker build -t acoursove2/nginx-app -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true acoursove2/nginx-app npm run test -- --coverage
+
+after_success:
+  - echo "Test success"
