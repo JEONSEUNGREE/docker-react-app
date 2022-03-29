@@ -13,5 +13,23 @@ before_install:
 script:
   - docker run -e CI=true acoursove2/nginx-app npm run test -- --coverage
 
-after_success:
-  - echo "Test success"
+# deploy 새롭게 추가된 부분 설명
+deploy:
+# provider 외부서비스 표시 (s3, elasticbeanstalk, firebase 등등등)
+  provider: elasticbeanstalk
+# region 현재 사용하고 있는 AWS의 서비스가 위치하고 있는 물리적 장소 (국가, 지역)
+  region: "ap-northeast-2"
+# app 생성된 어플리케이션의 이름
+  app: "docker-react-app"
+# env DockerReactApp-env (환경의 이름 - 생략가능)
+  env: "Dockerreactapp-env"
+# bucket_name : 해당 elasticbeanstalk을 위한 s3 버켓이름 (s3 파일저장하는 버켓)
+# tavis에서 가지고 있는 파일을 압축해서 s3에 보낸다. (s3를 생성한 적은 없지만 elasticbeanstalk 생성시 자동으로 생성됨)
+  bucket_name: "elasticbeanstalk-ap-northeast-2-749963199960"
+  bucket_path: "docker-react-app"
+#  branch: branch가 많은데 어떤 branch에 push 될때 aws에 배포할것인지 설정
+  on:
+    branch: master
+
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
